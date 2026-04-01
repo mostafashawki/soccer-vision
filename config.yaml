@@ -1,0 +1,26 @@
+model:
+  weights: yolov8n.pt
+  confidence_threshold: 0.5
+  field_mask: true           # filter detections outside the green pitch
+  device: auto               # auto-selects GPU if available, else CPU
+
+tracking:
+  max_age: 30                # frames before track is dropped
+  min_hits: 3                # frames before track is confirmed
+  scene_change_threshold: 0.8  # normalized frame diff to trigger tracker reset
+
+team_classification:
+  n_clusters: 4              # team_a, team_b + 2 other slots (GK, referee)
+  color_space: HSV
+  sample_region: torso       # crop bounding box to torso for jersey color
+  bootstrap_frames: 50       # frames to accumulate before freezing classifier
+
+output:
+  output_dir: ./output       # directory for all generated files
+  save_video: true
+  save_json: true
+  save_predictions: true     # set true to export predictions.csv for evaluation
+  frame_skip: 1              # process every Nth frame (1 = all frames)
+  blur_threshold: 150        # skip frames with Laplacian variance below this (motion blur filter)
+                             # 0 = disabled | 50 = loose | 100 = balanced | 200 = strict
+  log_level: INFO
